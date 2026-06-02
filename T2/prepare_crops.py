@@ -104,9 +104,9 @@ def process_single_image(args):
         )
 
         labels[crop_stem] = {
-            'cls'       : anno['cls'],
+            'cls': anno['cls'],
             'action_vec': action_vec.tolist(),
-            'loc_vec'   : loc_vec.tolist(),
+            'loc_vec': loc_vec.tolist(),
         }
 
     return labels
@@ -119,7 +119,6 @@ def extract_crops(split, json_index, waymo_yolo, crops_dir, n_workers):
 
     img_files = [f for f in os.listdir(img_dir) if f.endswith('.jpg')]
 
-    # Build worker args — only images that have annotations
     worker_args = []
     for fname in img_files:
         stem = fname[:-4]

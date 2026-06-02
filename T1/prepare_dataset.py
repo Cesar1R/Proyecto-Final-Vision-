@@ -97,8 +97,8 @@ def process_single_video(args):
 
             cx = max(0.0, min(1.0, (x1 + x2) / 2))
             cy = max(0.0, min(1.0, (y1 + y2) / 2))
-            w  = max(0.001, min(1.0, x2 - x1))
-            h  = max(0.001, min(1.0, y2 - y1))
+            w = max(0.001, min(1.0, x2 - x1))
+            h = max(0.001, min(1.0, y2 - y1))
 
             labels.append(f"{cls_id} {cx:.6f} {cy:.6f} {w:.6f} {h:.6f}")
             stats[CLASS_NAMES[cls_id]] += 1

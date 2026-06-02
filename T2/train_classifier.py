@@ -100,7 +100,7 @@ class ActionLocClassifier(nn.Module):
 
     def forward(self, x):
         feat = self.backbone(x)
-        actions = self.action_head(feat)  # logits — BCEWithLogitsLoss handles sigmoid
+        actions = self.action_head(feat)
         locs = self.loc_head(feat)
         return actions, locs
 
@@ -117,7 +117,7 @@ def compute_map(preds, targets, threshold=0.5):
         pred = preds[:, c]
         if gt.sum() == 0:
             continue
-        # Simple AP: correlation between prediction and ground truth
+        # Compute correlation between prediction and ground truth
         sorted_idx = np.argsort(-pred)
         gt_sorted = gt[sorted_idx]
         tp_cumsum = np.cumsum(gt_sorted)
@@ -168,11 +168,11 @@ def train(
 
     # Datasets
     train_ds = CropDataset(crops_dir, 'train', transform=train_tf)
-    val_ds   = CropDataset(crops_dir, 'val',   transform=val_tf)
+    val_ds = CropDataset(crops_dir, 'val',   transform=val_tf)
 
     train_dl = DataLoader(train_ds, batch_size=batch, shuffle=True,
                           num_workers=workers, pin_memory=True)
-    val_dl   = DataLoader(val_ds,   batch_size=batch, shuffle=False,
+    val_dl = DataLoader(val_ds,   batch_size=batch, shuffle=False,
                           num_workers=workers, pin_memory=True)
 
     # Model
@@ -235,12 +235,8 @@ def train(
                 all_loc_gt.append(loc_gt.cpu())
 
         avg_val_loss = val_loss / len(val_dl)
-        action_map = compute_map(
-            torch.cat(all_action_pred), torch.cat(all_action_gt)
-        )
-        loc_map = compute_map(
-            torch.cat(all_loc_pred), torch.cat(all_loc_gt)
-        )
+        action_map = compute_map(torch.cat(all_action_pred), torch.cat(all_action_gt))
+        loc_map = compute_map(torch.cat(all_loc_pred), torch.cat(all_loc_gt))
         mean_map = (action_map + loc_map) / 2
 
         print(f"Epoch {epoch}/{epochs} | "

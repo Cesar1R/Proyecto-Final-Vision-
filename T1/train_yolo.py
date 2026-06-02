@@ -54,7 +54,7 @@ def train(
         print(f"VRAM: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
 
     yaml_path = os.path.join(dataset_dir, "dataset.yaml")
-    runs_dir  = os.path.join(dataset_dir, "runs")
+    runs_dir = os.path.join(dataset_dir, "runs")
 
     if not os.path.exists(yaml_path):
         raise FileNotFoundError(
@@ -70,28 +70,26 @@ def train(
         print(f"\nStarting training with {model_name}")
         model = YOLO(model_name)
         train_results = model.train(
-            data      = yaml_path,
-            epochs    = epochs,
-            imgsz     = imgsz,
-            batch     = batch,
-            rect      = True,       # rectangular batches better for non-square frames
-            device    = device,
-            project   = runs_dir,
-            name      = "waymo_agent_det",
-            pretrained= True,
-            patience  = patience,
-            fraction  = fraction,
-            save      = True,
-            plots     = True,
-            workers   = workers,
+            data = yaml_path,
+            epochs = epochs,
+            imgsz = imgsz,
+            batch = batch,
+            rect = True,       # rectangular batches better for non-square frames
+            device = device,
+            project = runs_dir,
+            name = "waymo_agent_det",
+            pretrained = True,
+            patience = patience,
+            fraction = fraction,
+            save = True,
+            plots = True,
+            workers = workers,
             # Data augmentation by default in YOLO: mosaic, fliplr, hsv_h/s/v, translate
-            # Added:
-            mixup      = 0.1,   # blends two images helps minority classes
-            copy_paste = 0.1,   # copies objects across images key for
-                                # Cyclist and LargeVeh which are underrepresented
-            degrees    = 5.0,   # slight rotation camera angle variation
-            flipud     = 0.0,   # disabled sky is always up in driving footage
-        )
+            mixup = 0.1,   
+            copy_paste = 0.1,
+            degrees = 5.0,
+            flipud = 0.0,
+            )
 
     best_model = os.path.join(runs_dir, "waymo_agent_det", "weights", "best.pt")
     print(f"\nTraining complete.")
@@ -104,9 +102,9 @@ def validate(dataset_dir, model_path, device=None):
     if device is None:
         device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
-    yaml_path   = os.path.join(dataset_dir, "dataset.yaml")
-    model       = YOLO(model_path)
-    results     = model.val(data=yaml_path, device=device)
+    yaml_path = os.path.join(dataset_dir, "dataset.yaml")
+    model = YOLO(model_path)
+    results = model.val(data=yaml_path, device=device)
     CLASS_NAMES = ["Pedestrian", "Car", "MedVeh", "LargeVeh", "Cyclist", "TrafficLight"]
 
     print(f"\n=== Validation results ===")
@@ -114,7 +112,7 @@ def validate(dataset_dir, model_path, device=None):
     print(f"mAP@0.50:0.95: {results.box.map:.4f}")
     print(f"\nPer-class AP@0.50:")
     for i, name in enumerate(CLASS_NAMES):
-        print(f"  {name:15s}: {results.box.ap50[i]:.4f}")
+        print(f {name:15s}: {results.box.ap50[i]:.4f}")
 
 
 if __name__ == "__main__":
@@ -147,15 +145,15 @@ if __name__ == "__main__":
 
     best_model = train(
         dataset_dir = args.dataset_dir,
-        model_name  = args.model,
-        epochs      = args.epochs,
-        imgsz       = args.imgsz,
-        batch       = args.batch,
-        fraction    = args.fraction,
-        patience    = args.patience,
-        device      = args.device,
-        workers     = args.workers,
-        resume      = args.resume,
+        model_name = args.model,
+        epochs = args.epochs,
+        imgsz = args.imgsz,
+        batch = args.batch,
+        fraction = args.fraction,
+        patience = args.patience,
+        device = args.device,
+        workers = args.workers,
+        resume = args.resume,
         resume_ckpt = args.resume_ckpt,
     )
 

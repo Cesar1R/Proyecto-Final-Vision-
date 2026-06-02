@@ -93,8 +93,7 @@ crop_tf = transforms.Compose([
 def enhance_frame(frame_bgr, gamma=0.7, clip_limit=2.0):
     """Apply same enhancement as in prepare_dataset.py."""
     inv_gamma = 1.0 / gamma
-    table = np.array([((i/255.0)**inv_gamma)*255
-                           for i in range(256)], dtype=np.uint8)
+    table = np.array([((i/255.0)**inv_gamma)*255 for i in range(256)], dtype=np.uint8)
     frame = cv2.LUT(frame_bgr, table)
     lab = cv2.cvtColor(frame, cv2.COLOR_BGR2LAB)
     L, a, b = cv2.split(lab)
@@ -157,14 +156,13 @@ def run_pipeline(
     max_frames= max_frames or total_fr
 
     video_name = os.path.splitext(os.path.basename(video_path))[0]
-    print(f"\nProcessing: {video_name} ({W}x{H} @ {fps:.1f}fps, "
-          f"{total_fr} frames)", flush=True)
+    print(f"\nProcessing: {video_name} ({W}x{H} @ {fps:.1f}fps, {total_fr} frames", flush=True)
 
     # Video writer
     writer = None
     if save_video:
         out_video = os.path.join(output_dir, f"{video_name}_t2.mp4")
-        writer    = cv2.VideoWriter(out_video, cv2.VideoWriter_fourcc(*"mp4v"), fps, (W, H))
+        writer = cv2.VideoWriter(out_video, cv2.VideoWriter_fourcc(*"mp4v"), fps, (W, H))
 
     # T1 + T2 tubes
     agent_tubes = defaultdict(list)
@@ -252,8 +250,7 @@ def run_pipeline(
 
         frame_idx += 1
         if frame_idx % 100 == 0:
-            print(f"  Frame {frame_idx}/{max_frames} | "
-                  f"active tracks: {len(event_tubes)}", flush=True)
+            print(f"  Frame {frame_idx}/{max_frames} | active tracks: {len(event_tubes)}", flush=True)
 
     cap.release()
     if writer:
