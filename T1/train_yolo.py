@@ -112,7 +112,7 @@ def validate(dataset_dir, model_path, device=None):
     print(f"mAP@0.50:0.95: {results.box.map:.4f}")
     print(f"\nPer-class AP@0.50:")
     for i, name in enumerate(CLASS_NAMES):
-        print(f{name:15s}: {results.box.ap50[i]:.4f}")
+        print("f{name:15s}: {results.box.ap50[i]:.4f}")
 
 
 if __name__ == "__main__":
